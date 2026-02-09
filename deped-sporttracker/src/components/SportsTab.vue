@@ -82,7 +82,7 @@ const closePopup = () => {
               v-for="sport in sports"
               :key="sport.name"
               class="group relative aspect-[5/3] overflow-hidden rounded-2xl bg-slate-800 shadow-[0_12px_24px_rgba(15,23,42,0.25)] ring-1 ring-white/20 transition"
-              :class="selectedSport?.name === sport.name ? 'ring-2 ring-orange-300' : ''"
+              :class="selectedSport?.name === sport.name ? 'ring-2 ring-blue-300' : ''"
               role="button"
               tabindex="0"
               @click="handleSportClick(sport)"
@@ -135,8 +135,8 @@ const closePopup = () => {
               </div>
 
               <div class="flex w-full flex-col gap-0">
-                <div class="flex items-center gap-3 rounded-2 bg-blue-900/90 px-4 py-3 text-sm font-semibold">
-                  <span class="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/10">
+                <div class="flex items-center gap-2 rounded-2 bg-blue-900/90 px-6 py-2 text-sm font-semibold">
+                  <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/10">
                     <img
                       src="/images/deped-logo.png"
                       alt="Lapu-Lapu City Division"
@@ -150,10 +150,10 @@ const closePopup = () => {
                   WIN
                 </div>
                 <div class="my-3 text-center text-2xl font-semibold">VS.</div>
-                <div class="flex items-center gap-3 rounded-2 bg-blue-900/90 px-4 py-3 text-sm font-semibold">
-                  <span class="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/10">
+                <div class="flex items-center gap-2 rounded-2 bg-blue-900/90 px-6 py-2 text-sm font-semibold">
+                  <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/10">
                     <img
-                      src="/images/deped-logo.png"
+                      src="/images/bogo-logo.png"
                       alt="Bogo City Division"
                       class="h-full w-full object-cover"
                     />
