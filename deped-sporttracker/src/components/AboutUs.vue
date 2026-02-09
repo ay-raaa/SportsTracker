@@ -12,8 +12,8 @@ const emit = defineEmits(['change'])
 </script>
 
 <template>
-  <div class="min-h-screen bg-[url('/images/deped.jpg')] bg-cover bg-center bg-fixed custom-scrollbar">
-    <div class="min-h-screen bg-white/60">
+  <div class="min-h-screen bg-[url('/images/deped.jpg')] bg-cover bg-center bg-fixed custom-scrollbar overflow-x-hidden">
+    <div class="min-h-screen bg-white/60 overflow-x-hidden">
       <div class="mx-auto w-full max-w-none px-0 pb-12 pt-0">
         <header
           class="h-24 w-full overflow-hidden bg-[url('/images/img.jpg')] bg-cover bg-[center_30%] shadow-[0_18px_40px_rgba(16,16,24,0.18)] md:h-28"
