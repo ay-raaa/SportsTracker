@@ -11,7 +11,6 @@ const props = defineProps({
 const emit = defineEmits(['change'])
 </script>
 
-<!-- navigation -->
 <template>
   <div class="min-h-screen bg-[url('/images/deped.jpg')] bg-cover bg-center bg-fixed">
     <div class="min-h-screen bg-white/60">
@@ -33,6 +32,9 @@ const emit = defineEmits(['change'])
             </div>
           </div>
         </header>
+
+        <!-- Slot for content below navigation -->
+        <slot></slot>
       </div>
     </div>
   </div>
