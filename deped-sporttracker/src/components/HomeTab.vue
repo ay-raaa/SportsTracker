@@ -18,15 +18,15 @@ const emit = defineEmits(['change'])
         <header
           class="h-24 w-full overflow-hidden bg-[url('/images/img.jpg')] bg-cover bg-center shadow-[0_18px_40px_rgba(16,16,24,0.18)] md:h-28"
         >
-          <div class="flex h-full items-center bg-blue-900/70 px-6">
-            <div class="flex items-center gap-4">
+          <div class="flex h-full items-center bg-blue-900/70 px-9">
+            <div class="flex items-center gap-10">
               <img
                 src="/images/deped-logo.png"
                 alt="Department of Education Lapu-Lapu Division"
-                class="h-12 w-12 rounded-full border-2 border-white/80 object-cover shadow"
+                class="h-20 w-20 rounded-full border-2 border-white/80 object-cover shadow"
               />
               <div>
-                <h1 class="text-2xl font-semibold text-white">Leagues</h1>
+                <h1 class="text-3xl font-semibold text-white">Leagues</h1>
                 <TabsNav :active="props.active" @change="emit('change', $event)" />
               </div>
             </div>
