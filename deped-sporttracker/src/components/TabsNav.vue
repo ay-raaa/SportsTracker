@@ -12,7 +12,7 @@ const tabs = ['Home', 'Sports', 'About Us']
 </script>
 
 <template>
-	<nav class="mt-2 flex flex-wrap gap-6 text-[13px] font-semibold text-white" aria-label="Primary">
+	<nav class="mt-2 flex flex-wrap gap-6 text-[13px] font-semibold text-white md:text-lg" aria-label="Primary">
 		<button
 			v-for="tab in tabs"
 			:key="tab"
