@@ -38,21 +38,21 @@ const closePopup = () => {
 </script>
 
 <template>
-  <div class="h-screen overflow-hidden bg-[url('/images/deped.jpg')] bg-cover bg-center bg-fixed">
-    <div class="h-full bg-white/60">
-      <div class="mx-auto w-full max-w-none px-0 pb-0 pt-0">
+  <div class="min-h-screen bg-[url('/images/deped.jpg')] bg-cover bg-center bg-fixed custom-scrollbar">
+    <div class="min-h-screen bg-white/60">
+      <div class="mx-auto w-full max-w-none px-0 pb-12 pt-0">
         <header
-          class="h-24 w-full overflow-hidden bg-[url('/images/img.jpg')] bg-cover bg-center shadow-[0_18px_40px_rgba(16,16,24,0.18)] md:h-28"
+          class="h-24 w-full overflow-hidden bg-[url('/images/img.jpg')] bg-cover bg-[center_30%] shadow-[0_18px_40px_rgba(16,16,24,0.18)] md:h-28"
         >
           <div class="flex h-full items-center bg-blue-900/70 px-6">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-10">
               <img
                 src="/images/deped-logo.png"
                 alt="Department of Education Lapu-Lapu Division"
-                class="h-18 w-20 rounded-full border-2 border-white/80 object-cover shadow"
+                class="h-20 w-20 rounded-full border-2 border-white/80 object-cover shadow"
               />
               <div>
-                <h1 class="text-2xl font-semibold text-white">Leagues</h1>
+                <h1 class="text-3xl font-semibold text-white">Leagues</h1>
                 <TabsNav :active="props.active" @change="emit('change', $event)" />
               </div>
             </div>
