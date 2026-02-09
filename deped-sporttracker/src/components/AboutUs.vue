@@ -16,7 +16,7 @@ const emit = defineEmits(['change'])
     <div class="min-h-screen bg-white/60">
       <div class="mx-auto w-full max-w-none px-0 pb-12 pt-0">
         <header
-          class="h-24 w-full overflow-hidden bg-[url('/images/img.jpg')] bg-cover bg-center shadow-[0_18px_40px_rgba(16,16,24,0.18)] md:h-28"
+          class="h-24 w-full overflow-hidden bg-[url('/images/img.jpg')] bg-cover bg-[center_30%] shadow-[0_18px_40px_rgba(16,16,24,0.18)] md:h-28"
         >
           <div class="flex h-full items-center bg-blue-900/70 px-6">
             <div class="flex items-center gap-4">
