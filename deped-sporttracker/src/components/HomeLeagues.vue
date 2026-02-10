@@ -54,7 +54,6 @@
             <option value="">All Level</option>
             <option value="elementary">Elementary</option>
             <option value="secondary">Secondary</option>
-            <option value="special">Special</option>
           </select>
         </div>
 
@@ -104,16 +103,29 @@
               </div>
 
               <div class="center-section">
-                <div class="team-name left">{{ match.home_division }}</div>
+                <div class="team-container">
+                  <img 
+                    :src="getDivisionLogo(match.home_division)" 
+                    :alt="match.home_division"
+                    class="division-logo"
+                  />
+                  <div class="team-name left">{{ match.home_division }}</div>
+                </div>
+                
                 <div class="match-info">
                   <div class="sport-name">{{ match.sport_name }}</div>
                   <div class="sport-detail">{{ match.sport_category }}</div>
+                  <span class="vs-text">VS</span>
                 </div>
-              </div>
 
-              <div class="right-section">
-                <span class="vs-text">VS</span>
-                <div class="team-name right">{{ match.against_division }}</div>
+                <div class="team-container">
+                  <div class="team-name right">{{ match.against_division }}</div>
+                  <img 
+                    :src="getDivisionLogo(match.against_division)" 
+                    :alt="match.against_division"
+                    class="division-logo"
+                  />
+                </div>
               </div>
             </div>
 
@@ -142,6 +154,28 @@ const filters = ref({
 const matches = ref([])
 const loading = ref(false)
 const error = ref('')
+
+// Division logo mapping
+const divisionLogos = {
+  'Lapu-Lapu City Division': '/images/deped-logo.png',
+  'Bogo City Division': '/images/bogo_logo.png',
+  'Bohol Division': '/images/bohol_logo.png',
+  'Carcar City Division': '/images/carcar_logo.png',
+  'Cebu City Division': '/images/cebucity_logo.png',
+  'Cebu Province Division': '/images/cebuprovince_logo.png',
+  'Danao City Division': '/images/danao_logo.png',
+  'Mandaue City Division': '/images/mandaue_logo.png',
+  'Naga City Division': '/images/nagacity_logo.png',
+  'Tagbilaran City Division':'/images/tagbilaran_logo.png',
+  'Talisay City Division': '/images/talisay_logo.png',
+  'Toledo City Division': '/images/toledo_logo.png',
+  // Add more divisions as needed
+}
+
+// Get division logo
+const getDivisionLogo = (divisionName) => {
+  return divisionLogos[divisionName] || '/images/default.png'
+}
 
 // Check if any filters are active
 const hasActiveFilters = computed(() => {
@@ -422,7 +456,7 @@ onMounted(() => {
 
 .match-content {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   gap: 25px;
   align-items: center;
   padding: 22px 28px;
@@ -463,6 +497,21 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 30px;
+  justify-content: space-between;
+}
+
+.team-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.division-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
 }
 
 .team-name {
@@ -480,7 +529,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex: 1;
 }
 
@@ -495,18 +544,12 @@ onMounted(() => {
   color: #6b7280;
 }
 
-.right-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-}
-
 .vs-text {
   font-weight: 800;
   color: #9ca3af;
-  font-size: 20px;
+  font-size: 18px;
   letter-spacing: 1px;
+  margin-top: 4px;
 }
 
 .match-footer {
@@ -555,21 +598,27 @@ onMounted(() => {
   .team-name.right {
     text-align: left;
   }
-
-  .right-section {
-    align-items: flex-start;
-  }
 }
 
 @media (max-width: 900px) {
   .filters-row {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  .division-logo {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 @media (max-width: 600px) {
   .filters-row {
     grid-template-columns: 1fr;
+  }
+  
+  .team-name {
+    font-size: 15px;
+    min-width: 100px;
   }
 }
 </style>
