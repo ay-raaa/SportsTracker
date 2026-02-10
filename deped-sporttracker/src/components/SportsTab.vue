@@ -18,28 +18,30 @@ const selectedLevel = ref('elementary')
 const selectedCategory = ref('')
 const selectedGender = ref('')
 const isSubmitting = ref(false)
+const successMessage = ref('')
+const errorMessage = ref('')
 
 const sports = [
-  { name: 'Special Games', image: '/images/img.jpg' },
-  { name: 'Archery', image: '/images/img2.jpg' },
+  { name: 'Archery', image: '/images/archery.jpg' },
   { name: 'Arnis', image: '/images/arnis.jpg' },
-  { name: 'Athletics', image: '/images/img.jpg' },
-  { name: 'Badminton', image: '/images/img.jpg' },
-  { name: 'Baseball', image: '/images/deped.jpg' },
+  { name: 'Athletics', image: '/images/athletics.jpg' },
+  { name: 'Badminton', image: '/images/badminton.jpg' },
+  { name: 'Baseball', image: '/images/baseball.jpg' },
   { name: 'Basketball', image: '/images/basketball.jpg' },
-  { name: 'Billiard', image: '/images/billiard.png' },
-  { name: 'Boxing', image: '/images/deped.jpg' },
-  { name: 'Chess', image: '/images/img.jpg' },
-  { name: 'Dance Sport', image: '/images/deped.jpg' },
-  { name: 'Football', image: '/images/img.jpg' },
-  { name: 'Gymnastic', image: '/images/deped.jpg' },
-  { name: 'Swimming', image: '/images/img.jpg' },
-  { name: 'Sepak Takraw', image: '/images/deped.jpg' },
-  { name: 'Softball', image: '/images/img.jpg' },
-  { name: 'Tennis', image: '/images/img.jpg' },
-  { name: 'Table Tennis', image: '/images/img.jpg' },
-  { name: 'Taekwondo', image: '/images/img.jpg' },
-  { name: 'Volleyball', image: '/images/img.jpg' },
+  { name: 'Billiard', image: '/images/billiard.jpg' },
+  { name: 'Boxing', image: '/images/boxing.jpg' },
+  { name: 'Chess', image: '/images/chess.jpg' },
+  { name: 'Dance Sport', image: '/images/dance_sport.jpg' },
+  { name: 'Football', image: '/images/football.jpg' },
+  { name: 'Gymnastic', image: '/images/gymnastic.jpg' },
+  { name: 'Swimming', image: '/images/swimming.jpg' },
+  { name: 'Sepak Takraw', image: '/images/sepak_takraw.jpg' },
+  { name: 'Softball', image: '/images/softball.jpg' },
+  { name: 'Tennis', image: '/images/tennis.jpg' },
+  { name: 'Table Tennis', image: '/images/table tennis.jpg' },
+  { name: 'Taekwondo', image: '/images/taekwondo.jpg' },
+  { name: 'Volleyball', image: '/images/volleyball.jpg' },
+  { name: 'Special Games', image: '/images/s-games.jpg' },
 ]
 
 const divisions = [
@@ -411,6 +413,11 @@ const closePopup = () => {
   selectedGender.value = ''
 }
 
+const closeMessage = () => {
+  successMessage.value = ''
+  errorMessage.value = ''
+}
+
 const setMatchResult = (side, value) => {
   if (!value) {
     resultHome.value = ''
@@ -514,10 +521,10 @@ const handleSubmit = async () => {
       throw new Error(errorText || 'Failed to save result.')
     }
 
-    alert('Result saved.')
+    successMessage.value = 'Game Result saved.'
     closePopup()
   } catch (error) {
-    alert(error.message || 'Failed to save result.')
+    errorMessage.value = error.message || 'Failed to save result.'
   } finally {
     isSubmitting.value = false
   }
@@ -527,6 +534,30 @@ const handleSubmit = async () => {
 <!-- Navigation -->
 <template>
   <div class="min-h-screen bg-[url('/images/deped.jpg')] bg-cover bg-center bg-fixed custom-scrollbar">
+    <div
+      v-if="successMessage || errorMessage"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      role="alertdialog"
+      aria-live="assertive"
+    >
+      <div class="w-full max-w-sm rounded-2xl bg-white px-6 py-5 text-slate-900 shadow-2xl">
+        <div class="text-lg font-semibold">
+          {{ successMessage ? 'Success' : 'Error' }}
+        </div>
+        <p class="mt-2 text-sm text-slate-700">
+          {{ successMessage || errorMessage }}
+        </p>
+        <div class="mt-4 flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg bg-blue-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-blue-700"
+            @click="closeMessage"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="min-h-screen bg-white/60">
       <div class="mx-auto w-full max-w-none px-0 pb-12 pt-0">
         <header
