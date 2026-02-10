@@ -6,8 +6,12 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply scrollbar-hide;
+  }
+
   body {
-    @apply min-h-screen bg-slate-200 text-slate-900;
+    @apply min-h-screen bg-slate-200 text-slate-900 scrollbar-hide;
     font-family: 'Poppins', 'Segoe UI', sans-serif;
   }
 }

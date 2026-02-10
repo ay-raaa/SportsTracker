@@ -26,7 +26,7 @@ const emit = defineEmits(['change'])
                 class="h-20 w-20 rounded-full border-2 border-white/80 object-cover shadow"
               />
               <div>
-                <h1 class="text-3xl font-semibold text-white">Leagues</h1>
+                <h1 class="text-4xl mb-5 mt-3 font-semibold text-white">Leagues</h1>
                 <TabsNav :active="props.active" @change="emit('change', $event)" />
               </div>
             </div>

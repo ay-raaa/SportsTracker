@@ -10,7 +10,7 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
-            "name": "sportstracker",
+            "name": "SportsTracker",
             "username": "root",
             "password": "1234",
             "database": "sportstracker"
