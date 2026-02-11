@@ -20,6 +20,12 @@ const selectedGender = ref('')
 const isSubmitting = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
+const validationErrors = ref({
+  category: '',
+  gender: '',
+  division: '',
+  result: ''
+})
 
 const sports = [
   { name: 'Archery', image: '/images/archery.jpg' },
@@ -411,6 +417,12 @@ const closePopup = () => {
   selectedAwayDivision.value = ''
   selectedCategory.value = ''
   selectedGender.value = ''
+  validationErrors.value = {
+    category: '',
+    gender: '',
+    division: '',
+    result: ''
+  }
 }
 
 const closeMessage = () => {
@@ -467,28 +479,38 @@ const setLevel = (level) => {
 }
 
 const handleSubmit = async () => {
-  if (!selectedSport.value) {
-    alert('Select a sport.')
-    return
+  // Reset validation errors
+  validationErrors.value = {
+    category: '',
+    gender: '',
+    division: '',
+    result: ''
   }
 
+  // Validate fields
+  let hasErrors = false
+
   if (!selectedCategory.value) {
-    alert('Select a category.')
-    return
+    validationErrors.value.category = 'Please select a category'
+    hasErrors = true
   }
 
   if (!selectedGender.value) {
-    alert('Select a gender.')
-    return
+    validationErrors.value.gender = 'Please select a gender'
+    hasErrors = true
   }
 
   if (!selectedAwayDivision.value) {
-    alert('Select an opposing division.')
-    return
+    validationErrors.value.division = 'Please select a division'
+    hasErrors = true
   }
 
   if (!resultHome.value || !resultAway.value) {
-    alert('Select results for both divisions.')
+    validationErrors.value.result = 'Please select results for both teams'
+    hasErrors = true
+  }
+
+  if (hasErrors) {
     return
   }
 
@@ -648,37 +670,54 @@ const handleSubmit = async () => {
               </button>
               <div class="flex h-full flex-col items-center justify-center gap-4">
               <h2 class="mt-1 text-3xl font-semibold">{{ selectedSport.name }}</h2>
-              <div class="mt-2 flex w-full flex-wrap items-center justify-center gap-2">
-                <label class="flex items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold">
-                  <select
-                    v-model="selectedGender"
-                    class="bg-transparent text-xs font-semibold text-white outline-none"
-                    aria-label="Select gender"
-                  >
-                    <option value="" selected disabled>Select Gender</option>
-                    <option class="text-slate-900" value="female">Female</option>
-                    <option class="text-slate-900" value="male">Male</option>
-                    <option class="text-slate-900" value="couple">Couple</option>
-                  </select>
-                </label>
-                <label class="flex  flex-1 items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold">
-                  <select
-                    v-model="selectedCategory"
-                    class="w-full bg-transparent text-xs font-semibold text-white outline-none"
-                    :disabled="categoryOptions.length === 0"
-                    aria-label="Select category"
-                  >
-                    <option value="" selected disabled>Select Category</option>
-                    <option
-                      v-for="category in categoryOptions"
-                      :key="category"
-                      class="text-slate-900"
-                      :value="category"
-                    >
-                      {{ category }}
-                    </option>
-                  </select>
-                </label>
+              
+              <div class="mt-2 w-full">
+                <div class="flex w-full flex-wrap items-center justify-center gap-2">
+                  <div class="flex flex-col">
+                    <label class="flex items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold"
+                      :class="{ 'ring-2 ring-red-400': validationErrors.gender }">
+                      <select
+                        v-model="selectedGender"
+                        class="bg-transparent text-xs font-semibold text-white outline-none"
+                        aria-label="Select gender"
+                        @change="validationErrors.gender = ''"
+                      >
+                        <option value="" selected disabled>Select Gender</option>
+                        <option class="text-slate-900" value="female">Female</option>
+                        <option class="text-slate-900" value="male">Male</option>
+                        <option class="text-slate-900" value="couple">Couple</option>
+                      </select>
+                    </label>
+                    <p v-if="validationErrors.gender" class="mt-1 px-2 text-[10px] font-medium text-red-300">
+                      {{ validationErrors.gender }}
+                    </p>
+                  </div>
+                  <div class="flex flex-1 flex-col">
+                    <label class="flex flex-1 items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold"
+                      :class="{ 'ring-2 ring-red-400': validationErrors.category }">
+                      <select
+                        v-model="selectedCategory"
+                        class="w-full bg-transparent text-xs font-semibold text-white outline-none"
+                        :disabled="categoryOptions.length === 0"
+                        aria-label="Select category"
+                        @change="validationErrors.category = ''"
+                      >
+                        <option value="" selected disabled>Select Category</option>
+                        <option
+                          v-for="category in categoryOptions"
+                          :key="category"
+                          class="text-slate-900"
+                          :value="category"
+                        >
+                          {{ category }}
+                        </option>
+                      </select>
+                    </label>
+                    <p v-if="validationErrors.category" class="mt-1 px-2 text-[10px] font-medium text-red-300">
+                      {{ validationErrors.category }}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <!-- Division Matchup Result -->
@@ -694,12 +733,13 @@ const handleSubmit = async () => {
                   <span class="flex-1 text-center">Lapu-Lapu City Division</span>
                   <!-- <span class="text-[10px]">▼</span> -->
                 </div>
-                <div class="rounded-2 bg-orange-700/90 px-4 py-1 text-center text-[11px] font-semibold tracking-[0.2em]">
+                <div class="rounded-2 bg-orange-700/90 px-4 py-1 text-center text-[11px] font-semibold tracking-[0.2em]"
+                  :class="{ 'ring-2 ring-red-400': validationErrors.result }">
                   <select
                     class="w-full bg-transparent text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-white outline-none"
                     aria-label="Select result for Lapu-Lapu City Division"
                     :value="resultHome"
-                    @change="setMatchResult('home', $event.target.value)"
+                    @change="setMatchResult('home', $event.target.value); validationErrors.result = ''"
                   >
                     <option value="" selected disabled>Select</option>
                     <option class="text-slate-900" value="win">WIN</option>
@@ -707,7 +747,8 @@ const handleSubmit = async () => {
                   </select>
                 </div>
                 <div class="my-3 text-center text-2xl font-semibold">VS.</div>
-                <div class="flex items-center gap-0 rounded-2 bg-blue-900/90 px-9 py-2 text-sm font-semibold">
+                <div class="flex items-center gap-0 rounded-2 bg-blue-900/90 px-9 py-2 text-sm font-semibold"
+                  :class="{ 'ring-2 ring-red-400': validationErrors.division }">
                   <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/100">
                     <img
                       :src="getDivisionLogo(selectedAwayDivision)"
@@ -719,6 +760,7 @@ const handleSubmit = async () => {
                     v-model="selectedAwayDivision"
                     class="flex-1 bg-transparent text-center text-sm font-semibold text-white outline-none"
                     aria-label="Select away division"
+                    @change="validationErrors.division = ''"
                   >
                     <option value="" selected disabled>Select Division</option>
                     <option
@@ -731,18 +773,25 @@ const handleSubmit = async () => {
                     </option>
                   </select>
                 </div>
-                <div class="rounded-2 bg-orange-700/90 px-4 py-1 text-center text-[11px] font-semibold tracking-[0.2em]">
+                <p v-if="validationErrors.division" class="mt-1 px-2 text-center text-[10px] font-medium text-red-300">
+                  {{ validationErrors.division }}
+                </p>
+                <div class="rounded-2 bg-orange-700/90 px-4 py-1 text-center text-[11px] font-semibold tracking-[0.2em]"
+                  :class="{ 'ring-2 ring-red-400': validationErrors.result }">
                   <select
                     class="w-full bg-transparent text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-white outline-none"
                     aria-label="Select result for Bogo City Division"
                     :value="resultAway"
-                    @change="setMatchResult('away', $event.target.value)"
+                    @change="setMatchResult('away', $event.target.value); validationErrors.result = ''"
                   >
                     <option value="" selected disabled>Select</option>
                     <option class="text-slate-900" value="win">WIN</option>
                     <option class="text-slate-900" value="lose">LOSE</option>
                   </select>
                 </div>
+                <p v-if="validationErrors.result" class="mt-1 px-2 text-center text-[10px] font-medium text-red-300">
+                  {{ validationErrors.result }}
+                </p>
               </div>
 
               <button
