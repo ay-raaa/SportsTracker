@@ -45,17 +45,17 @@ const sports = [
 ]
 
 const divisions = [
-  { name: 'Bogo City Division', logo: '/images/bogo-logo.png' },
-  { name: 'Bohol Division', logo: '/images/bogo-logo.png' },
-  { name: 'Cebu Province Division', logo: '/images/bogo-logo.png' },
-  { name: 'Cebu City Division', logo: '/images/bogo-logo.png' },
-  { name: 'Carmen City Division', logo: '/images/bogo-logo.png' },
-  { name: 'City of Naga Division', logo: '/images/bogo-logo.png' },
-  { name: 'Danao City Division', logo: '/images/bogo-logo.png' },
-  { name: 'Mandaue City Division', logo: '/images/bogo-logo.png' },
-  { name: 'Tagbilaran City Division', logo: '/images/bogo-logo.png' },
-  { name: 'Talisay City Division', logo: '/images/bogo-logo.png' },
-  { name: 'Toledo City Division', logo: '/images/bogo-logo.png' },
+  { name: 'Bogo City Division', logo: '/images/bogo_logo.png' },
+  { name: 'Bohol Division', logo: '/images/bohol_logo.png' },
+  { name: 'Cebu Province Division', logo: '/images/cebuprovince_logo.png' },
+  { name: 'Cebu City Division', logo: '/images/cebucity_logo.png' },
+  { name: 'Carcar City Division', logo: '/images/carcar_logo.png' },
+  { name: 'City of Naga Division', logo: '/images/nagacity_logo.png' },
+  { name: 'Danao City Division', logo: '/images/danao_logo.png' },
+  { name: 'Mandaue City Division', logo: '/images/mandaue_logo.png' },
+  { name: 'Tagbilaran City Division', logo: '/images/tagbilaran_logo.png' },
+  { name: 'Talisay City Division', logo: '/images/talisay_logo.png' },
+  { name: 'Toledo City Division', logo: '/images/toledo_logo.png' },
 ]
 
 const selectedAwayDivision = ref('')
@@ -438,7 +438,7 @@ const setMatchResult = (side, value) => {
 }
 
 const getDivisionLogo = (divisionName) =>
-  divisions.find((division) => division.name === divisionName)?.logo || '/images/bogo-logo.png'
+  divisions.find((division) => division.name === divisionName)?.logo || '/images/deped-logo.png'
 
 const categoryOptions = computed(() => {
   if (!selectedSport.value) {
@@ -708,7 +708,7 @@ const handleSubmit = async () => {
                 </div>
                 <div class="my-3 text-center text-2xl font-semibold">VS.</div>
                 <div class="flex items-center gap-0 rounded-2 bg-blue-900/90 px-9 py-2 text-sm font-semibold">
-                  <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/10">
+                  <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/100">
                     <img
                       :src="getDivisionLogo(selectedAwayDivision)"
                       :alt="selectedAwayDivision"
