@@ -1,523 +1,575 @@
 <template>
-    <div class="leagues-container">
-      <!-- Filters Section - Fixed -->
-      <div class="filters-card">
-        <div class="filters-grid">
-          <div class="filter-group">
-            <input 
-              v-model="filters.date" 
-              type="date" 
-              class="filter-input"
-              placeholder="mm/dd/yy"
-            />
-          </div>
-  
-          <div class="filter-group">
-            <select v-model="filters.sport" class="filter-select">
-              <option value="">All Sports</option>
-              <option value="athletics-seated-shot-put">Special Games</option>
-              <option value="athletics-long-jump">Archery</option>
-              <option value="athletics-high-jump">Arnis</option>
-              <option value="swimming-50-back-stroke">Athletics</option>
-              <option value="swimming-50-breast-stroke">Badminton</option>
-              <option value="swimming-50-freestyle">Baseball</option>
-              <option value="swimming-50-butterfly">Basketball</option>
-              <option value="swimming-50-butterfly">Billiard</option>
-              <option value="swimming-50-butterfly">Chess</option>
-              <option value="swimming-50-butterfly">Boxing</option>
-              <option value="swimming-50-butterfly">Dance Sport</option>
-              <option value="swimming-50-butterfly">Football</option>
-              <option value="swimming-50-butterfly">Gymnastic</option>
-              <option value="swimming-50-butterfly">Swimming</option>
-              <option value="swimming-50-butterfly">Sipak Takraw</option>
-              <option value="swimming-50-butterfly">Softball</option>
-              <option value="swimming-50-butterfly">Tennis</option>
-              <option value="swimming-50-butterfly">Table Tennis</option>
-              <option value="swimming-50-butterfly">Taekwondo</option>
-              <option value="swimming-50-butterfly">Volleyball</option>
-            </select>
-          </div>
-  
-          <div class="filter-group">
-            <select v-model="filters.category" class="filter-select">
-              <option value="">All Category</option>
-              <option value="elementary">Elementary</option>
-              <option value="secondary">Secondary</option>
-              <option value="tertiary">Tertiary</option>
-            </select>
-          </div>
-  
-          <div class="filter-group">
-            <select v-model="filters.level" class="filter-select">
-              <option value="">All Levels</option>
-              <option value="elementary">Elementary</option>
-              <option value="secondary">Secondary</option>
-              <option value="tertiary">Tertiary</option>
-            </select>
-          </div>
-  
-          <div class="filter-group">
-            <select v-model="filters.sortBy" class="filter-select">
-              <option value="date">Sort by Date</option>
-              <option value="division-az">Division (A-Z)</option>
-              <option value="division-za">Division (Z-A)</option>
-              <option value="sport">Sort by Sport</option>
-            </select>
-          </div>
+  <div class="leagues-container">
+    <div class="results-card">
+      <div class="title-row">
+        <h2 class="results-title">Match Results</h2>
+        <button 
+          v-if="hasActiveFilters" 
+          @click="clearFilters" 
+          class="clear-all-text"
+        >
+          Clear All
+        </button>
+      </div>
+      
+      <!-- Filters in one row -->
+      <div class="filters-row">
+        <div class="filter-group">
+          <input 
+            v-model="filters.date" 
+            type="date" 
+            class="filter-input"
+            placeholder="mm/dd/yy"
+          />
+        </div>
+
+        <div class="filter-group">
+          <select v-model="filters.sport" class="filter-select">
+            <option value="">All Sports</option>
+            <option value="Special Games">Special Games</option>
+            <option value="Archery">Archery</option>
+            <option value="Arnis">Arnis</option>
+            <option value="Athletics">Athletics</option>
+            <option value="Badminton">Badminton</option>
+            <option value="Baseball">Baseball</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Billiard">Billiard</option>
+            <option value="Chess">Chess</option>
+            <option value="Boxing">Boxing</option>
+            <option value="Dance Sport">Dance Sport</option>
+            <option value="Football">Football</option>
+            <option value="Gymnastic">Gymnastic</option>
+            <option value="Swimming">Swimming</option>
+            <option value="Sepak Takraw">Sepak Takraw</option>
+            <option value="Softball">Softball</option>
+            <option value="Tennis">Tennis</option>
+            <option value="Table Tennis">Table Tennis</option>
+            <option value="Taekwondo">Taekwondo</option>
+            <option value="Volleyball">Volleyball</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <select v-model="filters.level" class="filter-select">
+            <option value="">All Level</option>
+            <option value="elementary">Elementary</option>
+            <option value="secondary">Secondary</option>
+            <option value="special">Special</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <select v-model="filters.gender" class="filter-select">
+            <option value="">All Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="couple">Couple</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <select v-model="filters.sortBy" class="filter-select">
+            <option value="division-az">Division (A-Z)</option>
+            <option value="division-za">Division (Z-A)</option>
+          </select>
         </div>
       </div>
-  
-      <!-- Match Results Section - Scrollable -->
-      <div class="results-card">
-        <h2 class="results-title">Match Results</h2>
-        
-        <div class="results-scroll-container">
-          <div v-if="filteredMatches.length === 0" class="no-results">
-            No matches found
-          </div>
-  
-          <div v-else class="matches-list">
-            <div 
-              v-for="match in filteredMatches" 
-              :key="match.id" 
-              class="match-card"
-              :class="match.result.toLowerCase()"
-            >
-              <div class="match-content">
-                <div class="left-section">
-                  <span class="result-badge" :class="match.result.toLowerCase()">
-                    {{ match.result.toUpperCase() }}
-                  </span>
-                  <span class="match-date">{{ match.date }}</span>
-                </div>
-  
-                <div class="center-section">
-                  <div class="team-name left">{{ match.team1 }}</div>
-                  <div class="match-info">
-                    <div class="sport-name">{{ match.sport }}</div>
-                    <div class="sport-detail">{{ match.detail }}</div>
-                  </div>
-                </div>
-  
-                <div class="right-section">
-                  <span class="vs-text">VS</span>
-                  <div class="team-name right">{{ match.team2 }}</div>
+      
+      <div class="results-scroll-container">
+        <div v-if="loading" class="no-results">
+          Loading matches...
+        </div>
+
+        <div v-else-if="error" class="no-results error">
+          {{ error }}
+        </div>
+
+        <div v-else-if="filteredMatches.length === 0" class="no-results">
+          No matches found
+        </div>
+
+        <div v-else class="matches-list">
+          <div 
+            v-for="match in filteredMatches" 
+            :key="match.sport_id" 
+            class="match-card"
+            :class="match.result.toLowerCase()"
+          >
+            <div class="match-content">
+              <div class="left-section">
+                <span class="result-badge" :class="match.result.toLowerCase()">
+                  {{ match.result.toUpperCase() }}
+                </span>
+                <span class="match-date">{{ formatDate(match.created_at) }}</span>
+              </div>
+
+              <div class="center-section">
+                <div class="team-name left">{{ match.home_division }}</div>
+                <div class="match-info">
+                  <div class="sport-name">{{ match.sport_name }}</div>
+                  <div class="sport-detail">{{ match.sport_category }}</div>
                 </div>
               </div>
-  
-              <div class="match-footer">
-                <span class="badge badge-category">{{ match.category }}</span>
-                <span class="badge badge-sport">{{ match.sportType }}</span>
+
+              <div class="right-section">
+                <span class="vs-text">VS</span>
+                <div class="team-name right">{{ match.against_division }}</div>
               </div>
+            </div>
+
+            <div class="match-footer">
+              <span class="badge badge-level">{{ match.sport_level }}</span>
+              <span class="badge badge-sport">{{ match.sport_gender }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, computed } from 'vue'
-  
-  const filters = ref({
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+
+const filters = ref({
+  date: '',
+  sport: '',
+  level: '',
+  gender: '',
+  sortBy: 'division-az'
+})
+
+const matches = ref([])
+const loading = ref(false)
+const error = ref('')
+
+// Check if any filters are active
+const hasActiveFilters = computed(() => {
+  return filters.value.date !== '' || 
+         filters.value.sport !== '' || 
+         filters.value.level !== '' || 
+         filters.value.gender !== ''
+})
+
+// Clear all filters
+const clearFilters = () => {
+  filters.value = {
     date: '',
     sport: '',
-    category: '',
     level: '',
-    sortBy: 'date'
+    gender: '',
+    sortBy: 'division-az'
+  }
+}
+
+// Fetch matches from API
+const fetchMatches = async () => {
+  loading.value = true
+  error.value = ''
+  
+  try {
+    console.log('Fetching matches from API...')
+    const response = await fetch('/api/sports-results')
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch matches')
+    }
+    
+    const data = await response.json()
+    console.log('Fetched data:', data)
+    
+    // Transform data to include result field
+    matches.value = data.map(match => ({
+      ...match,
+      result: match.home_result === 1 ? 'Win' : 'Lose'
+    }))
+  } catch (err) {
+    error.value = err.message || 'Failed to load matches'
+    console.error('Error fetching matches:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+// Format date for display
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A'
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: '2-digit', 
+    day: '2-digit' 
   })
-  
-  // Sample match data
-  const matches = ref([
-    {
-      id: 1,
-      result: 'Win',
-      date: '2025-02-05',
-      team1: 'Archery',
-      team2: 'Cebu City Division',
-      sport: '15-meter distance',
-      detail: '15-meter distance',
-      category: 'Elementary',
-      sportType: 'MVB'
-    },
-    {
-      id: 2,
-      result: 'Loss',
-      date: '2025-02-04',
-      team1: 'Basketball Team A',
-      team2: 'Basketball Team B',
-      sport: 'Full Court',
-      detail: 'Championship Round',
-      category: 'Secondary',
-      sportType: 'Basketball'
-    },
-    {
-      id: 3,
-      result: 'Win',
-      date: '2025-02-03',
-      team1: 'Volleyball Squad',
-      team2: 'City Champions',
-      sport: 'Indoor Volleyball',
-      detail: 'Finals Match',
-      category: 'Tertiary',
-      sportType: 'Volleyball'
-    },
-    {
-      id: 4,
-      result: 'Win',
-      date: '2025-02-02',
-      team1: 'Swimming Team',
-      team2: 'Water Dragons',
-      sport: '50m Freestyle',
-      detail: 'Qualifying Round',
-      category: 'Elementary',
-      sportType: 'Swimming'
-    },
-    {
-      id: 5,
-      result: 'Loss',
-      date: '2025-02-01',
-      team1: 'Tennis Squad A',
-      team2: 'Tennis Squad B',
-      sport: 'Singles Match',
-      detail: 'Semi-Finals',
-      category: 'Tertiary',
-      sportType: 'Tennis'
-    }
-  ])
-  
-  const filteredMatches = computed(() => {
-    let result = [...matches.value]
-  
-    if (filters.value.date) {
-      result = result.filter(m => m.date === filters.value.date)
-    }
-  
-    if (filters.value.sport) {
-      result = result.filter(m => 
-        m.sport.toLowerCase().includes(filters.value.sport.toLowerCase())
-      )
-    }
-  
-    if (filters.value.category) {
-      result = result.filter(m => 
-        m.category.toLowerCase() === filters.value.category.toLowerCase()
-      )
-    }
-  
-    if (filters.value.level) {
-      result = result.filter(m => 
-        m.category.toLowerCase() === filters.value.level.toLowerCase()
-      )
-    }
-  
-    // Sorting
-    if (filters.value.sortBy === 'date') {
-      result.sort((a, b) => new Date(b.date) - new Date(a.date))
-    } else if (filters.value.sortBy === 'division-az') {
-      result.sort((a, b) => a.team2.localeCompare(b.team2))
-    } else if (filters.value.sortBy === 'division-za') {
-      result.sort((a, b) => b.team2.localeCompare(a.team2))
-    }
-  
-    return result
-  })
-  </script>
-  
-  <style scoped>
-  .leagues-container {
-    height: calc(100vh - 7rem); /* Subtract header height (28 = 7rem) */
-    overflow-y: auto;
-    padding: 0 20px 30px;
+}
+
+const filteredMatches = computed(() => {
+  let result = [...matches.value]
+
+  if (filters.value.date) {
+    result = result.filter(m => {
+      if (!m.created_at) return false
+      
+      // Convert database timestamp to local date string (YYYY-MM-DD)
+      const matchDate = new Date(m.created_at)
+      const year = matchDate.getFullYear()
+      const month = String(matchDate.getMonth() + 1).padStart(2, '0')
+      const day = String(matchDate.getDate()).padStart(2, '0')
+      const formattedDate = `${year}-${month}-${day}`
+      
+      console.log('Comparing:', formattedDate, 'with', filters.value.date)
+      return formattedDate === filters.value.date
+    })
   }
-  
-  /* Custom scrollbar for the main container */
-  .leagues-container::-webkit-scrollbar {
-    width: 8px;
+
+  if (filters.value.sport) {
+    result = result.filter(m => 
+      m.sport_name === filters.value.sport
+    )
   }
-  
-  .leagues-container::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+
+  if (filters.value.level) {
+    result = result.filter(m => 
+      m.sport_level && m.sport_level.toLowerCase() === filters.value.level.toLowerCase()
+    )
   }
-  
-  .leagues-container::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
+
+  if (filters.value.gender) {
+    result = result.filter(m => 
+      m.sport_gender && m.sport_gender.toLowerCase() === filters.value.gender.toLowerCase()
+    )
   }
-  
-  .leagues-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
+
+  // Sorting
+  if (filters.value.sortBy === 'division-az') {
+    result.sort((a, b) => (a.against_division || '').localeCompare(b.against_division || ''))
+  } else if (filters.value.sortBy === 'division-za') {
+    result.sort((a, b) => (b.against_division || '').localeCompare(a.against_division || ''))
   }
-  
-  .filters-card {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    max-width: 1400px;
-    margin: 25px auto;
+
+  console.log('Filtered matches count:', result.length)
+  return result
+})
+
+// Fetch matches on component mount
+onMounted(() => {
+  fetchMatches()
+})
+</script>
+
+<style scoped>
+.leagues-container {
+  height: calc(100vh - 7rem);
+  overflow: hidden;
+  padding: 0 20px 30px;
+}
+
+.results-card {
+  background: white;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  max-width: 1400px;
+  margin: 25px auto;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 9rem);
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-shrink: 0;
+}
+
+.results-title {
+  font-size: 25px;
+  color: #1f2937;
+  font-weight: 700;
+  margin: 0;
+}
+
+.clear-all-text {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.clear-all-text:hover {
+  color: #dc2626;
+}
+
+.filters-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-shrink: 0;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-input,
+.filter-select {
+  padding: 12px 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  transition: all 0.3s;
+  color: #374151;
+  height: 46px;
+}
+
+.filter-input::placeholder {
+  color: #9ca3af;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filter-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 18px;
+  padding-right: 40px;
+}
+
+.results-scroll-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  padding-right: 10px;
+}
+
+/* Custom scrollbar for results */
+.results-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.results-scroll-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 4px;
+}
+
+.results-scroll-container::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 4px;
+}
+
+.results-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px;
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.error {
+  color: #ef4444;
+}
+
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.match-card {
+  padding: 0;
+  border-radius: 10px;
+  border-left: 6px solid;
+  overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.match-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateX(3px);
+}
+
+.match-card.win {
+  background: linear-gradient(to right, #d1f4e0 0%, #ecfdf5 100%);
+  border-left-color: #10b981;
+}
+
+.match-card.lose {
+  background: linear-gradient(to right, #fecdd3 0%, #fef2f2 100%);
+  border-left-color: #ef4444;
+}
+
+.match-content {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 25px;
+  align-items: center;
+  padding: 22px 28px;
+}
+
+.left-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.result-badge {
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.result-badge.win {
+  background: #10b981;
+  color: white;
+}
+
+.result-badge.lose {
+  background: #ef4444;
+  color: white;
+}
+
+.match-date {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.center-section {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.team-name {
+  font-weight: 600;
+  font-size: 17px;
+  color: #1f2937;
+  min-width: 150px;
+}
+
+.team-name.right {
+  text-align: right;
+}
+
+.match-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.sport-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #374151;
+}
+
+.sport-detail {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.vs-text {
+  font-weight: 800;
+  color: #9ca3af;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+.match-footer {
+  display: flex;
+  gap: 12px;
+  padding: 15px 28px;
+  background: rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-level {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-sport {
+  background: #e9d5ff;
+  color: #7c3aed;
+}
+
+@media (max-width: 1400px) {
+  .filters-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
   }
-  
-  .filters-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .filter-input,
-  .filter-select {
-    padding: 14px 18px;
-    border: 2px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 15px;
-    background: white;
-    transition: all 0.3s;
-    color: #374151;
-    height: 50px;
-  }
-  
-  .filter-input::placeholder {
-    color: #9ca3af;
-  }
-  
-  .filter-input:focus,
-  .filter-select:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-  
-  .filter-select {
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-    background-position: right 12px center;
-    background-repeat: no-repeat;
-    background-size: 20px;
-    padding-right: 40px;
-  }
-  
-  .results-card {
-    background: white;
-    padding: 35px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    max-width: 1400px;
-    margin: 25px auto;
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - 350px); /* Adjust based on filter card height */
-  }
-  
-  .results-title {
-    font-size: 28px;
-    margin-bottom: 25px;
-    color: #1f2937;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  
-  .results-scroll-container {
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex: 1;
-    padding-right: 10px;
-  }
-  
-  /* Custom scrollbar for results */
-  .results-scroll-container::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .results-scroll-container::-webkit-scrollbar-track {
-    background: #f3f4f6;
-    border-radius: 4px;
-  }
-  
-  .results-scroll-container::-webkit-scrollbar-thumb {
-    background: #9ca3af;
-    border-radius: 4px;
-  }
-  
-  .results-scroll-container::-webkit-scrollbar-thumb:hover {
-    background: #6b7280;
-  }
-  
-  .no-results {
-    text-align: center;
-    padding: 60px;
-    color: #9ca3af;
-    font-size: 16px;
-  }
-  
-  .matches-list {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-  
-  .match-card {
-    padding: 0;
-    border-radius: 10px;
-    border-left: 6px solid;
-    overflow: hidden;
-    transition: all 0.3s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    flex-shrink: 0;
-  }
-  
-  .match-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transform: translateX(3px);
-  }
-  
-  .match-card.win {
-    background: linear-gradient(to right, #d1f4e0 0%, #ecfdf5 100%);
-    border-left-color: #10b981;
-  }
-  
-  .match-card.loss {
-    background: linear-gradient(to right, #fecdd3 0%, #fef2f2 100%);
-    border-left-color: #ef4444;
-  }
-  
+}
+
+@media (max-width: 1200px) {
   .match-content {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 25px;
-    align-items: center;
-    padding: 22px 28px;
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
-  
-  .left-section {
-    display: flex;
+
+  .center-section {
     flex-direction: column;
-    gap: 8px;
+    gap: 15px;
+  }
+
+  .team-name.right {
+    text-align: left;
+  }
+
+  .right-section {
     align-items: flex-start;
   }
-  
-  .result-badge {
-    padding: 6px 18px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.5px;
+}
+
+@media (max-width: 900px) {
+  .filters-row {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .result-badge.win {
-    background: #10b981;
-    color: white;
+}
+
+@media (max-width: 600px) {
+  .filters-row {
+    grid-template-columns: 1fr;
   }
-  
-  .result-badge.loss {
-    background: #ef4444;
-    color: white;
-  }
-  
-  .match-date {
-    color: #6b7280;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  
-  .center-section {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-  }
-  
-  .team-name {
-    font-weight: 600;
-    font-size: 17px;
-    color: #1f2937;
-    min-width: 150px;
-  }
-  
-  .team-name.right {
-    text-align: right;
-  }
-  
-  .match-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    flex: 1;
-  }
-  
-  .sport-name {
-    font-weight: 600;
-    font-size: 16px;
-    color: #374151;
-  }
-  
-  .sport-detail {
-    font-size: 13px;
-    color: #6b7280;
-  }
-  
-  .right-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-  }
-  
-  .vs-text {
-    font-weight: 800;
-    color: #9ca3af;
-    font-size: 20px;
-    letter-spacing: 1px;
-  }
-  
-  .match-footer {
-    display: flex;
-    gap: 12px;
-    padding: 15px 28px;
-    background: rgba(255, 255, 255, 0.5);
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-  }
-  
-  .badge {
-    padding: 6px 14px;
-    border-radius: 16px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  
-  .badge-category {
-    background: #dbeafe;
-    color: #1e40af;
-  }
-  
-  .badge-sport {
-    background: #e9d5ff;
-    color: #7c3aed;
-  }
-  
-  @media (max-width: 1200px) {
-    .match-content {
-      grid-template-columns: 1fr;
-      gap: 15px;
-    }
-  
-    .center-section {
-      flex-direction: column;
-      gap: 15px;
-    }
-  
-    .team-name.right {
-      text-align: left;
-    }
-  
-    .right-section {
-      align-items: flex-start;
-    }
-  }
-  </style>
+}
+</style>
