@@ -59,6 +59,10 @@ const divisions = [
 ]
 
 const selectedAwayDivision = ref('')
+const genderError = ref('')
+const categoryError = ref('')
+const divisionError = ref('')
+const resultError = ref('')
 
 const categoryMap = {
   'Archery': {
@@ -411,6 +415,10 @@ const closePopup = () => {
   selectedAwayDivision.value = ''
   selectedCategory.value = ''
   selectedGender.value = ''
+  genderError.value = ''
+  categoryError.value = ''
+  divisionError.value = ''
+  resultError.value = ''
 }
 
 const closeMessage = () => {
@@ -430,11 +438,13 @@ const setMatchResult = (side, value) => {
   if (side === 'home') {
     resultHome.value = value
     resultAway.value = opposite
+    resultError.value = ''
     return
   }
 
   resultAway.value = value
   resultHome.value = opposite
+  resultError.value = ''
 }
 
 const getDivisionLogo = (divisionName) =>
@@ -471,28 +481,35 @@ const setLevel = (level) => {
 }
 
 const handleSubmit = async () => {
-  if (!selectedSport.value) {
-    alert('Select a sport.')
-    return
-  }
+  // Reset all errors
+  genderError.value = ''
+  categoryError.value = ''
+  divisionError.value = ''
+  resultError.value = ''
+
+  let hasError = false
 
   if (!selectedCategory.value) {
-    alert('Select a category.')
-    return
+    categoryError.value = 'Please select a category'
+    hasError = true
   }
 
   if (!selectedGender.value) {
-    alert('Select a gender.')
-    return
+    genderError.value = 'Please select a gender'
+    hasError = true
   }
 
   if (!selectedAwayDivision.value) {
-    alert('Select an opposing division.')
-    return
+    divisionError.value = 'Please select a division'
+    hasError = true
   }
 
   if (!resultHome.value || !resultAway.value) {
-    alert('Select results for both divisions.')
+    resultError.value = 'Please select results for both divisions'
+    hasError = true
+  }
+
+  if (hasError) {
     return
   }
 
@@ -653,42 +670,50 @@ const handleSubmit = async () => {
               <div class="flex h-full flex-col items-center gap-4 pt-12 sm:justify-center sm:pt-0">
               <h2 class="mt-1 text-3xl font-semibold">{{ selectedSport.name }}</h2>
               <div class="mt-2 flex w-full flex-wrap items-center justify-center gap-2">
-                <label class="flex items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold">
-                  <select
-                    v-model="selectedGender"
-                    class="bg-transparent text-xs font-semibold text-white outline-none"
-                    aria-label="Select gender"
-                  >
-                    <option value="" selected disabled>Select Gender</option>
-                    <option class="text-slate-900" value="female">Female</option>
-                    <option class="text-slate-900" value="male">Male</option>
-                    <option
-                      v-if="showCoupleGender"
-                      class="text-slate-900"
-                      value="couple"
+                <div class="flex flex-col">
+                  <label class="flex items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold" :class="genderError ? 'ring-2 ring-red-500' : ''">
+                    <select
+                      v-model="selectedGender"
+                      class="bg-transparent text-xs font-semibold text-white outline-none"
+                      aria-label="Select gender"
+                      @change="genderError = ''"
                     >
-                      Couple
-                    </option>
-                  </select>
-                </label>
-                <label class="flex  flex-1 items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold">
-                  <select
-                    v-model="selectedCategory"
-                    class="w-full bg-transparent text-xs font-semibold text-white outline-none"
-                    :disabled="categoryOptions.length === 0"
-                    aria-label="Select category"
-                  >
-                    <option value="" selected disabled>Select Category</option>
-                    <option
-                      v-for="category in categoryOptions"
-                      :key="category"
-                      class="text-slate-900"
-                      :value="category"
+                      <option value="" selected disabled>Select Gender</option>
+                      <option class="text-slate-900" value="female">Female</option>
+                      <option class="text-slate-900" value="male">Male</option>
+                      <option
+                        v-if="showCoupleGender"
+                        class="text-slate-900"
+                        value="couple"
+                      >
+                        Couple
+                      </option>
+                    </select>
+                  </label>
+                  <span v-if="genderError" class="mt-1 text-xs text-red-400">{{ genderError }}</span>
+                </div>
+                <div class="flex flex-1 flex-col">
+                  <label class="flex flex-1 items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold" :class="categoryError ? 'ring-2 ring-red-500' : ''">
+                    <select
+                      v-model="selectedCategory"
+                      class="w-full bg-transparent text-xs font-semibold text-white outline-none"
+                      :disabled="categoryOptions.length === 0"
+                      aria-label="Select category"
+                      @change="categoryError = ''"
                     >
-                      {{ category }}
-                    </option>
-                  </select>
-                </label>
+                      <option value="" selected disabled>Select Category</option>
+                      <option
+                        v-for="category in categoryOptions"
+                        :key="category"
+                        class="text-slate-900"
+                        :value="category"
+                      >
+                        {{ category }}
+                      </option>
+                    </select>
+                  </label>
+                  <span v-if="categoryError" class="mt-1 text-xs text-red-400">{{ categoryError }}</span>
+                </div>
               </div>
 
               <!-- Division Matchup Result -->
@@ -704,7 +729,7 @@ const handleSubmit = async () => {
                   <span class="flex-1 text-center">Lapu-Lapu City Division</span>
                   <!-- <span class="text-[10px]">▼</span> -->
                 </div>
-                <div class="rounded-2 bg-orange-700/90 px-4 py-1 text-center text-[11px] font-semibold tracking-[0.2em]">
+                <div class="rounded-2 bg-orange-700/90 px-4 py-1 text-center text-[11px] font-semibold tracking-[0.2em]" :class="resultError ? 'ring-2 ring-red-500' : ''">
                   <select
                     class="w-full bg-transparent text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-white outline-none"
                     aria-label="Select result for Lapu-Lapu City Division"
@@ -717,7 +742,7 @@ const handleSubmit = async () => {
                   </select>
                 </div>
                 <div class="my-3 text-center text-2xl font-semibold">VS.</div>
-                <div class="flex items-center gap-0 rounded-2 bg-blue-900/90 px-9 py-2 text-sm font-semibold">
+                <div class="flex items-center gap-0 rounded-2 bg-blue-900/90 px-9 py-2 text-sm font-semibold" :class="divisionError ? 'ring-2 ring-red-500' : ''">
                   <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/100">
                     <img
                       :src="getDivisionLogo(selectedAwayDivision)"
@@ -729,6 +754,7 @@ const handleSubmit = async () => {
                     v-model="selectedAwayDivision"
                     class="flex-1 bg-transparent text-center text-sm font-semibold text-white outline-none"
                     aria-label="Select away division"
+                    @change="divisionError = ''"
                   >
                     <option value="" selected disabled>Select Division</option>
                     <option
@@ -741,7 +767,8 @@ const handleSubmit = async () => {
                     </option>
                   </select>
                 </div>
-                <div class="rounded-2 bg-orange-700/90 px-4 py-1 text-center text-[11px] font-semibold tracking-[0.2em]">
+                <span v-if="divisionError" class="mt-1 block text-center text-xs text-red-400">{{ divisionError }}</span>
+                <div class="rounded-2 bg-orange-700/90 px-4 py-1 text-center text-[11px] font-semibold tracking-[0.2em]" :class="resultError ? 'ring-2 ring-red-500' : ''">
                   <select
                     class="w-full bg-transparent text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-white outline-none"
                     aria-label="Select result for Bogo City Division"
@@ -754,6 +781,8 @@ const handleSubmit = async () => {
                   </select>
                 </div>
               </div>
+
+              <span v-if="resultError" class="mt-2 block text-center text-xs text-red-400">{{ resultError }}</span>
 
               <button
                 type="button"
