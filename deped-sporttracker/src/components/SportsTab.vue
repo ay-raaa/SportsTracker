@@ -457,6 +457,10 @@ const categoryOptions = computed(() => {
   return sportCategories[selectedLevel.value] || []
 })
 
+const showCoupleGender = computed(
+  () => selectedSport.value?.name === 'Dance Sport'
+)
+
 const setLevel = (level) => {
   if (selectedLevel.value === level) {
     return
@@ -658,7 +662,13 @@ const handleSubmit = async () => {
                     <option value="" selected disabled>Select Gender</option>
                     <option class="text-slate-900" value="female">Female</option>
                     <option class="text-slate-900" value="male">Male</option>
-                    <option class="text-slate-900" value="couple">Couple</option>
+                    <option
+                      v-if="showCoupleGender"
+                      class="text-slate-900"
+                      value="couple"
+                    >
+                      Couple
+                    </option>
                   </select>
                 </label>
                 <label class="flex  flex-1 items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold">
