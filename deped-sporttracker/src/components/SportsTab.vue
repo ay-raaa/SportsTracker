@@ -640,7 +640,7 @@ const handleSubmit = async () => {
 
           <aside
             v-if="selectedSport"
-            class="pointer-events-auto fixed right-0 top-24 h-[560px] w-[360px] overflow-y-auto bg-black/85 px-6 pb-6 pt-5 text-white shadow-[0_20px_46px_rgba(15,23,42,0.5)] ring-1 ring-white/10 sm:w-[380px] md:top-28 z-50"
+            class="pointer-events-auto fixed inset-0 z-50 overflow-y-auto bg-black/90 px-6 pb-6 pt-5 text-white shadow-[0_20px_46px_rgba(15,23,42,0.5)] ring-1 ring-white/10 sm:inset-auto sm:right-0 sm:top-24 sm:h-[560px] sm:w-[360px] sm:bg-black/85 md:top-28 sm:w-[380px]"
           >
               <button
                 type="button"
@@ -650,7 +650,7 @@ const handleSubmit = async () => {
               >
                 &larr;
               </button>
-              <div class="flex h-full flex-col items-center justify-center gap-4">
+              <div class="flex h-full flex-col items-center gap-4 pt-12 sm:justify-center sm:pt-0">
               <h2 class="mt-1 text-3xl font-semibold">{{ selectedSport.name }}</h2>
               <div class="mt-2 flex w-full flex-wrap items-center justify-center gap-2">
                 <label class="flex items-center gap-2 rounded-full bg-blue-800 px-4 py-1.5 text-xs font-semibold">
