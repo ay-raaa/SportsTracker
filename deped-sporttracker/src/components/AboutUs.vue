@@ -73,10 +73,14 @@ const emit = defineEmits(['change'])
                 <h3 class="section-title">
                   SENSE OF UNITY – STRATEGY
                 </h3>
-                <p class="section-text">
-                  <span class="strategy-item">Learning Strategy • Interactive Approach</span><br />
-                  <span class="strategy-item">Management Strategy • Collaborative Approach</span>
-                </p>
+                <div class="section-text">
+                  <p class="category-text">Learning Strategy</p>
+                  <ul class="bullet-list">
+                    <li>Interactive Approach</li>
+                    <li>Management Strategy</li>
+                    <li>Collaborative Approach</li>
+                  </ul>
+                </div>
               </div>
 
               <!-- Infrastructures -->
@@ -84,11 +88,23 @@ const emit = defineEmits(['change'])
                 <h3 class="section-title">
                   SENSE OF EMPOWERMENT – INFRASTRUCTURES
                 </h3>
-                <p class="section-text infrastructure-text">
-                  <span class="infra-category">Behavioral Infrastructure</span> • Pupils and Students • Teachers • Officials<br />
-                  <span class="infra-category">Physical Infrastructures</span> • Classrooms • Schoolgrounds • Auxiliary Amenities •
-                  Libraries • Laboratories • Guidance and NDEP Centers
-                </p>
+                <div class="section-text">
+                  <p class="category-text">Behavioral Infrastructure</p>
+                  <ul class="bullet-list">
+                    <li>Pupils and Students</li>
+                    <li>Teachers</li>
+                    <li>Officials</li>
+                  </ul>
+                  <p class="category-text">Physical Infrastructures</p>
+                  <ul class="bullet-list">
+                    <li>Classrooms</li>
+                    <li>Schoolgrounds</li>
+                    <li>Auxiliary Amenities</li>
+                    <li>Libraries</li>
+                    <li>Laboratories</li>
+                    <li>Guidance and NDEP Centers</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -144,5 +160,29 @@ const emit = defineEmits(['change'])
 /* Section Text - Italic */
 .section-text {
   font-style: italic;
+}
+
+/* Category Text - Italic */
+.category-text {
+  font-style: italic;
+  font-weight: bold;
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+.category-text:first-child {
+  margin-top: 0;
+}
+
+/* Bullet List */
+.bullet-list {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 0;
+  font-style: normal;
+}
+
+.bullet-list li {
+  margin-bottom: 4px;
 }
 </style>
