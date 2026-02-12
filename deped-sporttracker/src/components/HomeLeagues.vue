@@ -68,6 +68,7 @@
 
         <div class="filter-group">
           <select v-model="filters.sortBy" class="filter-select">
+            <option value="sort-by">Sort by</option>
             <option value="division-az">Division (A-Z)</option>
             <option value="division-za">Division (Z-A)</option>
           </select>
@@ -148,7 +149,7 @@ const filters = ref({
   sport: '',
   level: '',
   gender: '',
-  sortBy: 'division-az'
+  sortBy: 'sort-by'
 })
 
 const matches = ref([])
@@ -165,7 +166,7 @@ const divisionLogos = {
   'Cebu Province Division': '/images/cebuprovince_logo.png',
   'Danao City Division': '/images/danao_logo.png',
   'Mandaue City Division': '/images/mandaue_logo.png',
-  'Naga City Division': '/images/nagacity_logo.png',
+  'City of Naga Division': '/images/nagacity_logo.png',
   'Tagbilaran City Division':'/images/tagbilaran_logo.png',
   'Talisay City Division': '/images/talisay_logo.png',
   'Toledo City Division': '/images/toledo_logo.png',
@@ -192,7 +193,7 @@ const clearFilters = () => {
     sport: '',
     level: '',
     gender: '',
-    sortBy: 'division-az'
+    sortBy: 'sort-by'
   }
 }
 
@@ -215,7 +216,7 @@ const fetchMatches = async () => {
     // Transform data to include result field
     matches.value = data.map(match => ({
       ...match,
-      result: match.home_result === 1 ? 'Win' : 'Lose'
+      result: match.home_result === 1 ? 'Win' : 'Loss'
     }))
   } catch (err) {
     error.value = err.message || 'Failed to load matches'
@@ -274,7 +275,9 @@ const filteredMatches = computed(() => {
   }
 
   // Sorting
-  if (filters.value.sortBy === 'division-az') {
+  if (filters.value.sortBy === 'newest-first') {
+    result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+  } else if (filters.value.sortBy === 'division-az') {
     result.sort((a, b) => (a.against_division || '').localeCompare(b.against_division || ''))
   } else if (filters.value.sortBy === 'division-za') {
     result.sort((a, b) => (b.against_division || '').localeCompare(a.against_division || ''))
@@ -449,7 +452,7 @@ onMounted(() => {
   border-left-color: #10b981;
 }
 
-.match-card.lose {
+.match-card.loss {
   background: linear-gradient(to right, #fecdd3 0%, #fef2f2 100%);
   border-left-color: #ef4444;
 }
@@ -482,7 +485,7 @@ onMounted(() => {
   color: white;
 }
 
-.result-badge.lose {
+.result-badge.loss {
   background: #ef4444;
   color: white;
 }
