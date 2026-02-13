@@ -35,7 +35,7 @@ const emit = defineEmits(['change'])
 
         <!-- About Us Section -->
         <div class="mx-auto max-w-7xl px-8 py-12">
-          <div class="grid grid-cols-1 gap-10 lg:grid-cols-[45%_55%] lg:gap-12">
+          <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-20 items-start">
             <!-- Left Column - Text Content -->
             <div class="space-y-8">
               <h2 class="mb-8 text-5xl font-bold text-gray-900 drop-shadow-sm tracking-tight">ABOUT US</h2>
@@ -109,16 +109,18 @@ const emit = defineEmits(['change'])
             </div>
 
             <!-- Right Column - Google Map -->
-            <div class="map-container">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15700.302608578971!2d123.9328826!3d10.3045205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a999c55b840945%3A0xd83e861cf9caac05!2sDepEd%20SDO%20Lapu-Lapu%20City!5e0!3m2!1sen-US!2sph!4v1707525900000!5m2!1sen-US!2sph"
-                width="100%"
-                height="100%"
-                style="border: 0"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
+            <div class="map-wrapper">
+              <div class="map-container">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15700.302608578971!2d123.9328826!3d10.3045205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a999c55b840945%3A0xd83e861cf9caac05!2sDepEd%20SDO%20Lapu-Lapu%20City!5e0!3m2!1sen-US!2sph!4v1707525900000!5m2!1sen-US!2sph"
+                  width="100%"
+                  height="100%"
+                  style="border: 0"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
             </div>
           </div>
         </div>
@@ -157,9 +159,10 @@ const emit = defineEmits(['change'])
   font-weight: 700;
 }
 
-/* Section Text - Italic */
+/* Section Text - Italic and Justified */
 .section-text {
   font-style: italic;
+  text-align: justify;
 }
 
 /* Category Text - Italic */
@@ -184,5 +187,47 @@ const emit = defineEmits(['change'])
 
 .bullet-list li {
   margin-bottom: 4px;
+}
+
+/* Map Wrapper - Responsive positioning */
+.map-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6rem;
+}
+
+@media (min-width: 1024px) {
+  .map-wrapper {
+    position: sticky;
+    top: 8rem;
+    align-self: flex-start;
+    padding-top: 8rem;
+  }
+}
+
+/* Map Container - Smaller size with better styling */
+.map-container {
+  width: 100%;
+  height: 450px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: white;
+}
+
+@media (min-width: 768px) {
+  .map-container {
+    height: 500px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .map-container {
+    height: 600px;
+    max-height: 85vh;
+  }
 }
 </style>
